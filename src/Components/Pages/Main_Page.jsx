@@ -8,22 +8,38 @@ import {
     Card,
     CardContent,
     CardActions,
+    CardMedia,
     TextField,
     IconButton,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import LaptopMacIcon from "@mui/icons-material/LaptopMac";
-import SmartphoneIcon from "@mui/icons-material/Smartphone";
-import TvIcon from "@mui/icons-material/Tv";
 import products from "../../data/products"; // Данные о товарах
 
 const Main_Page = () => {
     const [searchTerm, setSearchTerm] = useState("");
 
+    // Проверяем, есть ли товар в корзине
+    const isInCart = (productId) => {
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+        return cart.some((item) => item.id === productId);
+    };
+
     // Фильтруем товары по поисковому запросу
     const filteredProducts = products.filter((product) =>
         product.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
+    const addToCart = (product) => {
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+        const existingProduct = cart.find((item) => item.id === product.id);
+        if (existingProduct) {
+            existingProduct.quantity += 1;
+        } else {
+            cart.push({ ...product, quantity: 1 });
+        }
+        localStorage.setItem("cart", JSON.stringify(cart));
+        alert(`${product.name} добавлен в корзину!`);
+    };
 
     return (
         <Box sx={{ p: 2, maxWidth: 600, mx: "auto" }}>
@@ -46,80 +62,14 @@ const Main_Page = () => {
                 />
             </Box>
 
-            {/* Популярные категории */}
-            <Box sx={{ mb: 4 }}>
-                <Typography variant="h6" gutterBottom>
-                    Популярные категории
-                </Typography>
-                <Grid container spacing={2} justifyContent="center">
-                    <Grid item xs={4} md={3}>
-                        <Button
-                            component={Link}
-                            to="/products?category=laptops"
-                            sx={{
-                                textAlign: "center",
-                                display: "flex",
-                                flexDirection: "column",
-                                color: "#333",
-                                p: 2,
-                                backgroundColor: "#f5f5f5",
-                                borderRadius: "12px",
-                                "&:hover": { backgroundColor: "#e0e0e0" },
-                            }}
-                        >
-                            <LaptopMacIcon sx={{ fontSize: 40, mb: 1 }} />
-                            <Typography variant="body2">Ноутбуки</Typography>
-                        </Button>
-                    </Grid>
-                    <Grid item xs={4} md={3}>
-                        <Button
-                            component={Link}
-                            to="/products?category=smartphones"
-                            sx={{
-                                textAlign: "center",
-                                display: "flex",
-                                flexDirection: "column",
-                                color: "#333",
-                                p: 2,
-                                backgroundColor: "#f5f5f5",
-                                borderRadius: "12px",
-                                "&:hover": { backgroundColor: "#e0e0e0" },
-                            }}
-                        >
-                            <SmartphoneIcon sx={{ fontSize: 40, mb: 1 }} />
-                            <Typography variant="body2">Смартфоны</Typography>
-                        </Button>
-                    </Grid>
-                    <Grid item xs={4} md={3}>
-                        <Button
-                            component={Link}
-                            to="/products?category=tv"
-                            sx={{
-                                textAlign: "center",
-                                display: "flex",
-                                flexDirection: "column",
-                                color: "#333",
-                                p: 2,
-                                backgroundColor: "#f5f5f5",
-                                borderRadius: "12px",
-                                "&:hover": { backgroundColor: "#e0e0e0" },
-                            }}
-                        >
-                            <TvIcon sx={{ fontSize: 40, mb: 1 }} />
-                            <Typography variant="body2">Телевизоры</Typography>
-                        </Button>
-                    </Grid>
-                </Grid>
-            </Box>
-
             {/* Список всех товаров */}
             <Box sx={{ mb: 8 }}>
-                <Typography variant="h6" gutterBottom>
-                    Все товары
+                <Typography variant="h6" gutterBottom sx={{ textAlign: 'center', mb: 2 }}>
+                    Товары
                 </Typography>
                 <Grid container spacing={2} justifyContent="center">
                     {filteredProducts.map((product) => (
-                        <Grid item xs={12} sm={6} md={4} key={product.id}>
+                        <Grid item xs={12} sm={6} md={6} key={product.id}>
                             <Card
                                 sx={{
                                     p: 2,
@@ -127,15 +77,20 @@ const Main_Page = () => {
                                     boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
                                 }}
                             >
-                                <CardContent>
+                                <CardMedia
+                                    component="img"
+                                    image={product.image}
+                                    alt={product.name}
+                                />
+                                <CardContent sx={{ padding: "10px 0" }}>
                                     <Typography variant="h6" gutterBottom>
                                         {product.name}
                                     </Typography>
                                     <Typography variant="body2" color="textSecondary">
-                                        Цена: {product.price} руб.
+                                        Цена: {new Intl.NumberFormat('ru-RU').format(product.price)} руб.
                                     </Typography>
                                 </CardContent>
-                                <CardActions>
+                                <CardActions sx={{ padding: "10px 0 0 0" }}>
                                     <Button
                                         component={Link}
                                         to={`/products/${product.id}`}
@@ -145,6 +100,25 @@ const Main_Page = () => {
                                     >
                                         Подробнее
                                     </Button>
+                                    {isInCart(product.id) ? (
+                                        <Button
+                                            size="small"
+                                            variant="outlined"
+                                            disabled
+                                            sx={{ borderColor: "#81212D", color: "#81212D" }}
+                                        >
+                                            Уже добавлен
+                                        </Button>
+                                    ) : (
+                                        <Button
+                                            onClick={() => addToCart(product)}
+                                            size="small"
+                                            variant="outlined"
+                                            sx={{ borderColor: "#81212D", color: "#81212D", "&:hover": { borderColor: "#a62a3d", color: "#a62a3d" } }}
+                                        >
+                                            В корзину
+                                        </Button>
+                                    )}
                                 </CardActions>
                             </Card>
                         </Grid>
