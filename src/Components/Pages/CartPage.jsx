@@ -34,10 +34,43 @@ const CartPage = () => {
         localStorage.setItem("cart", JSON.stringify(updatedCart));
     };
 
-    const handleCheckout = () => {
-        alert("Заказ оформлен! Спасибо за покупку.");
-        setCart([]);
-        localStorage.removeItem("cart");
+    const sendOrderToBot = async () => {
+        const tg = window.Telegram.WebApp;
+        const user = tg.initDataUnsafe.user;
+
+        const orderDetails = cart.map(
+            (item) => `${item.name} x${item.quantity} = ${item.quantity * item.price} руб.`
+        ).join("\n");
+        const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+        const message = `
+        🛒 *Новый заказ*
+        👤 Пользователь: [${user.first_name} ${user.last_name || ""}](tg://user?id=${user.id})
+        📦 Товары:\n${orderDetails}
+        💰 *Общая сумма*: ${total} руб.
+        `;
+
+        const BOT_TOKEN = "7746793707:AAE4NQYuJK3fyJp-9bl6FA8uyj4qdGVIG7w";
+        const CHAT_ID = "992109845"; // Замените на ID чата или группы
+
+        try {
+            await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    chat_id: CHAT_ID,
+                    text: message,
+                    parse_mode: "Markdown",
+                }),
+            });
+            alert("Заказ успешно отправлен!");
+            // Очистить корзину после отправки заказа
+            localStorage.removeItem("cart");
+            setCart([]);
+        } catch (error) {
+            console.error("Ошибка при отправке заказа:", error);
+            alert("Ошибка при отправке заказа. Попробуйте еще раз.");
+        }
     };
 
     return (
@@ -68,7 +101,7 @@ const CartPage = () => {
                                             {item.name}
                                         </Typography>
                                         <Typography variant="body2" color="textSecondary">
-                                            Цена: {item.price} руб.
+                                            Цена: {new Intl.NumberFormat('ru-RU').format(item.price)} руб.
                                         </Typography>
                                         <Typography variant="body2" color="textSecondary">
                                             Количество: {item.quantity}
@@ -120,7 +153,7 @@ const CartPage = () => {
                     </Grid>
                     <Box sx={{ textAlign: "center", mt: 4 }}>
                         <Button
-                            onClick={handleCheckout}
+                            onClick={sendOrderToBot}
                             variant="contained"
                             sx={{
                                 backgroundColor: "#81212D",
