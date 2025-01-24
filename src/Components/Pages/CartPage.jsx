@@ -43,7 +43,7 @@ const CartPage = () => {
         ).join("\n");
         const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
-        const message = `🛒 *Новый заказ*\n👤 1Пользователь: [${user.first_name} ${user.last_name || ""}](tg://user?id=${user.id})\n📦 Товары:\n${orderDetails}\n💰 *Общая сумма*: ${total} руб.`;
+        const message = `🛒 *Новый заказ*\n👤 Пользователь: [${user.first_name} ${user.last_name || ""}](tg://user?id=${user.id})\n📦 Товары:\n${orderDetails}\n💰 *Общая сумма*: ${total} руб.`;
 
         const BOT_TOKEN = "7746793707:AAE4NQYuJK3fyJp-9bl6FA8uyj4qdGVIG7w";
         const CHAT_ID = "992109845"; // Замените на ID чата или группы

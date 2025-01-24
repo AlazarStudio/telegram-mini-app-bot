@@ -67,13 +67,16 @@ const Main_Page = () => {
                 <Typography variant="h6" gutterBottom sx={{ textAlign: 'center', mb: 2 }}>
                     Товары
                 </Typography>
-                <Grid container spacing={2} justifyContent="center">
+                <Grid container spacing={2} sx={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                }}>
                     {filteredProducts.map((product) => (
-                        <Grid item xs={12} sm={6} md={6} key={product.id}>
+                        <Grid item sx={{ width: '50%' }} key={product.id}>
                             <Card
                                 sx={{
                                     p: 2,
-                                    borderRadius: "12px",
+                                    borderRadius: "10px",
                                     boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
                                 }}
                             >
@@ -83,29 +86,31 @@ const Main_Page = () => {
                                     alt={product.name}
                                 />
                                 <CardContent sx={{ padding: "10px 0" }}>
-                                    <Typography variant="h6" gutterBottom>
+                                    <Typography gutterBottom sx={{ fontSize: '14px' }}>
                                         {product.name}
                                     </Typography>
                                     <Typography variant="body2" color="textSecondary">
-                                        Цена: {new Intl.NumberFormat('ru-RU').format(product.price)} руб.
+                                        {new Intl.NumberFormat('ru-RU').format(product.price)} руб.
                                     </Typography>
                                 </CardContent>
-                                <CardActions sx={{ padding: "10px 0 0 0" }}>
+
+                                <CardActions sx={{ padding: "10px 0 0 0", display: 'flex', flexDirection: 'column' }}>
                                     <Button
                                         component={Link}
                                         to={`/products/${product.id}`}
                                         size="small"
                                         variant="contained"
-                                        sx={{ backgroundColor: "#81212D", "&:hover": { backgroundColor: "#a62a3d" } }}
+                                        sx={{ fontSize: '12px', width: '100%', marginBottom: '10px', backgroundColor: "#81212D", "&:hover": { backgroundColor: "#a62a3d" } }}
                                     >
                                         Подробнее
                                     </Button>
+
                                     {isInCart(product.id) ? (
                                         <Button
                                             size="small"
                                             variant="outlined"
                                             disabled
-                                            sx={{ borderColor: "#81212D", color: "#81212D" }}
+                                            sx={{ fontSize: '12px', width: '100%', marginLeft: '0px !important', borderColor: "#81212D", color: "#81212D" }}
                                         >
                                             Уже добавлен
                                         </Button>
@@ -114,7 +119,8 @@ const Main_Page = () => {
                                             onClick={() => addToCart(product)}
                                             size="small"
                                             variant="outlined"
-                                            sx={{ borderColor: "#81212D", color: "#81212D", "&:hover": { borderColor: "#a62a3d", color: "#a62a3d" } }}
+                                            sx={{ fontSize: '12px', width: '100%', marginLeft: '0px !important', borderColor: "#81212D", color: "#81212D", "&:hover": { borderColor: "#a62a3d", color: "#a62a3d" } }}
+
                                         >
                                             В корзину
                                         </Button>
