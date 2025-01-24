@@ -118,6 +118,7 @@ const CatalogPage = () => {
                                         image={product.image}
                                         alt={product.name}
                                         sx={{
+                                            minHeight: '150px',
                                             maxHeight: '150px',
                                             objectFit: 'contain',
                                         }}
