@@ -72,60 +72,75 @@ const Main_Page = () => {
                     flexWrap: 'wrap',
                 }}>
                     {filteredProducts.map((product) => (
-                        <Grid item sx={{ width: '50%' }} key={product.id}>
+                        <Grid item sx={{ width: '50%', height: '400px' }} key={product.id}>
                             <Card
                                 sx={{
                                     p: 2,
                                     borderRadius: "10px",
-                                    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+                                    height: '100%',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    justifyContent: 'space-between'
+                                    // boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
                                 }}
                             >
                                 <CardMedia
                                     component="img"
                                     image={product.image}
                                     alt={product.name}
+                                    sx={{
+                                        maxHeight: '150px',
+                                        objectFit: 'contain',
+                                    }}
                                 />
-                                <CardContent sx={{ padding: "10px 0" }}>
-                                    <Typography gutterBottom sx={{ fontSize: '14px' }}>
-                                        {product.name}
-                                    </Typography>
-                                    <Typography variant="body2" color="textSecondary">
-                                        {new Intl.NumberFormat('ru-RU').format(product.price)} руб.
-                                    </Typography>
-                                </CardContent>
+                                <Box sx={{
+                                    height: '100%',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    justifyContent: 'space-between'
+                                }}>
+                                    <CardContent sx={{ padding: "10px 0" }}>
+                                        <Typography gutterBottom sx={{ fontSize: '14px' }}>
+                                            {product.name}
+                                        </Typography>
+                                        <Typography variant="body2" color="textSecondary">
+                                            {new Intl.NumberFormat('ru-RU').format(product.price)} руб.
+                                        </Typography>
+                                    </CardContent>
 
-                                <CardActions sx={{ padding: "10px 0 0 0", display: 'flex', flexDirection: 'column' }}>
-                                    <Button
-                                        component={Link}
-                                        to={`/products/${product.id}`}
-                                        size="small"
-                                        variant="contained"
-                                        sx={{ fontSize: '12px', width: '100%', marginBottom: '10px', backgroundColor: "#81212D", "&:hover": { backgroundColor: "#a62a3d" } }}
-                                    >
-                                        Подробнее
-                                    </Button>
-
-                                    {isInCart(product.id) ? (
+                                    <CardActions sx={{ padding: "10px 0 0 0", display: 'flex', flexDirection: 'column' }}>
                                         <Button
+                                            component={Link}
+                                            to={`/products/${product.id}`}
                                             size="small"
-                                            variant="outlined"
-                                            disabled
-                                            sx={{ fontSize: '12px', width: '100%', marginLeft: '0px !important', borderColor: "#81212D", color: "#81212D" }}
+                                            variant="contained"
+                                            sx={{ fontSize: '12px', width: '100%', marginBottom: '10px', backgroundColor: "#81212D", "&:hover": { backgroundColor: "#a62a3d" } }}
                                         >
-                                            Уже добавлен
+                                            Подробнее
                                         </Button>
-                                    ) : (
-                                        <Button
-                                            onClick={() => addToCart(product)}
-                                            size="small"
-                                            variant="outlined"
-                                            sx={{ fontSize: '12px', width: '100%', marginLeft: '0px !important', borderColor: "#81212D", color: "#81212D", "&:hover": { borderColor: "#a62a3d", color: "#a62a3d" } }}
 
-                                        >
-                                            В корзину
-                                        </Button>
-                                    )}
-                                </CardActions>
+                                        {isInCart(product.id) ? (
+                                            <Button
+                                                size="small"
+                                                variant="outlined"
+                                                disabled
+                                                sx={{ fontSize: '12px', width: '100%', marginLeft: '0px !important', borderColor: "#81212D", color: "#81212D" }}
+                                            >
+                                                Уже добавлен
+                                            </Button>
+                                        ) : (
+                                            <Button
+                                                onClick={() => addToCart(product)}
+                                                size="small"
+                                                variant="outlined"
+                                                sx={{ fontSize: '12px', width: '100%', marginLeft: '0px !important', borderColor: "#81212D", color: "#81212D", "&:hover": { borderColor: "#a62a3d", color: "#a62a3d" } }}
+
+                                            >
+                                                В корзину
+                                            </Button>
+                                        )}
+                                    </CardActions>
+                                </Box>
                             </Card>
                         </Grid>
                     ))}

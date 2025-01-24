@@ -95,63 +95,81 @@ const CatalogPage = () => {
 
             {/* Список товаров в категории */}
             {selectedCategory && (
-                <Box sx={{ mt: 4 }}>
+                <Box sx={{ mb: 8 }}>
                     <Typography variant="h6" gutterBottom>
                         Товары в категории: {categories.find((c) => c.id === selectedCategory)?.name}
                     </Typography>
-                    <Grid container spacing={2} justifyContent="center">
+                    <Grid container spacing={2}>
                         {filteredProducts.map((product) => (
-                            <Grid item xs={12} sm={6} md={4} key={product.id}>
+                            <Grid item sx={{ width: '50%', height: '400px' }} key={product.id}>
                                 <Card
                                     sx={{
                                         p: 2,
-                                        borderRadius: "12px",
-                                        boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+                                        borderRadius: "10px",
+                                        height: '100%',
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        justifyContent: 'space-between'
+                                        // boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
                                     }}
                                 >
                                     <CardMedia
                                         component="img"
                                         image={product.image}
                                         alt={product.name}
+                                        sx={{
+                                            maxHeight: '150px',
+                                            objectFit: 'contain',
+                                        }}
                                     />
-                                    <CardContent sx={{ padding: "10px 0" }}>
-                                        <Typography variant="h6" gutterBottom>
-                                            {product.name}
-                                        </Typography>
-                                        <Typography variant="body2" color="textSecondary">
-                                            Цена: {new Intl.NumberFormat('ru-RU').format(product.price)} руб.
-                                        </Typography>
-                                    </CardContent>
-                                    <CardActions sx={{ padding: "10px 0" }}>
-                                        <Button
-                                            component={Link}
-                                            to={`/products/${product.id}`}
-                                            size="small"
-                                            variant="contained"
-                                            sx={{ backgroundColor: "#81212D", "&:hover": { backgroundColor: "#a62a3d" } }}
-                                        >
-                                            Подробнее
-                                        </Button>
-                                        {isInCart(product.id) ? (
+                                    <Box sx={{
+                                        height: '100%',
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        justifyContent: 'space-between'
+                                    }}>
+                                        <CardContent sx={{ padding: "10px 0" }}>
+                                            <Typography gutterBottom sx={{ fontSize: '14px' }}>
+                                                {product.name}
+                                            </Typography>
+                                            <Typography variant="body2" color="textSecondary">
+                                                {new Intl.NumberFormat('ru-RU').format(product.price)} руб.
+                                            </Typography>
+                                        </CardContent>
+
+                                        <CardActions sx={{ padding: "10px 0 0 0", display: 'flex', flexDirection: 'column' }}>
                                             <Button
+                                                component={Link}
+                                                to={`/products/${product.id}`}
                                                 size="small"
-                                                variant="outlined"
-                                                disabled
-                                                sx={{ borderColor: "#81212D", color: "#81212D" }}
+                                                variant="contained"
+                                                sx={{ fontSize: '12px', width: '100%', marginBottom: '10px', backgroundColor: "#81212D", "&:hover": { backgroundColor: "#a62a3d" } }}
                                             >
-                                                Уже добавлен
+                                                Подробнее
                                             </Button>
-                                        ) : (
-                                            <Button
-                                                onClick={() => addToCart(product)}
-                                                size="small"
-                                                variant="outlined"
-                                                sx={{ borderColor: "#81212D", color: "#81212D", "&:hover": { borderColor: "#a62a3d", color: "#a62a3d" } }}
-                                            >
-                                                В корзину
-                                            </Button>
-                                        )}
-                                    </CardActions>
+
+                                            {isInCart(product.id) ? (
+                                                <Button
+                                                    size="small"
+                                                    variant="outlined"
+                                                    disabled
+                                                    sx={{ fontSize: '12px', width: '100%', marginLeft: '0px !important', borderColor: "#81212D", color: "#81212D" }}
+                                                >
+                                                    Уже добавлен
+                                                </Button>
+                                            ) : (
+                                                <Button
+                                                    onClick={() => addToCart(product)}
+                                                    size="small"
+                                                    variant="outlined"
+                                                    sx={{ fontSize: '12px', width: '100%', marginLeft: '0px !important', borderColor: "#81212D", color: "#81212D", "&:hover": { borderColor: "#a62a3d", color: "#a62a3d" } }}
+
+                                                >
+                                                    В корзину
+                                                </Button>
+                                            )}
+                                        </CardActions>
+                                    </Box>
                                 </Card>
                             </Grid>
                         ))}
