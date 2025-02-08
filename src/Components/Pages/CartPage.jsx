@@ -46,7 +46,7 @@ const CartPage = () => {
         const message = `🛒 *Новый заказ*\n👤 Пользователь: [${user.first_name} ${user.last_name || ""}](tg://user?id=${user.id})\n📦 Товары:\n${orderDetails}\n💰 *Общая сумма*: ${total} руб.`;
 
         const BOT_TOKEN = "7746793707:AAE4NQYuJK3fyJp-9bl6FA8uyj4qdGVIG7w";
-        const CHAT_ID = "992109845"; // Замените на ID чата или группы
+        const CHAT_ID = "2011703766"; // Замените на ID чата или группы
 
         try {
             await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
